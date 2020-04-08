@@ -4,6 +4,7 @@
 <div class="col-md-12">
     <div class="row">
         <div class="col-md-6">
+            {{^repo}}
             <form action="/list" method="POST">
                 <div class="form-group">
                     <input type="text" class="form-control" name="token" placeholder="토큰 값을 입력하세요">
@@ -13,16 +14,45 @@
                 </div>
             <button type="submit" class="btn btn-primary" name=btn-save>등록</button>
             </form>
+            {{/repo}}
+            {{#repo}}
+                <h3 class="text-primary">{{repo}}</h3>
+            {{/repo}}
         </div>
-        
+    </div>
+    <div class="row">
+        {{#repo}}
+        {{#token}}
+        <div class="col-md-4">
+            <a href="/open?repo={{repo}}&token={{token}}" class="text-danger">Open</a> /
+            <a href="/closed?repo={{repo}}&token={{token}}" class="text-danger">Closed</a>
+        </div>
+        {{/token}}
+        {{/repo}}
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="list-group">
+                {{#issue}}
+                <a href="{{html_url}}" class="list-group-item list-group-item-action">
+                    <code>{{number}}</code>
+                    <p class="font-weight-bold">{{title}}</p>
+                    {{created_at}}
+                    <code>{{user.login}}</code>
+                    {{#labels}}
+                    <span class="badge badge-warning">{{name}}</span>
+                    {{/labels}}
+                    {{open_issues_count}}
+                </a>
+                {{/issue}}
+            </div>
+        </div>
 
-
-    <table class="table table-horizontal table-bordered">
+    <!-- <table class="table table-horizontal table-bordered">
         {{#issue}}
         <tr>
             <td>{{number}}</td>
             <td>{{title}}</td>
-            <td>{{state}}</td>
             <td>{{created_at}}</td>
             <td>{{user.login}}</td>
         
@@ -33,9 +63,9 @@
             </td>
         </tr>
         {{/issue}}
-    </table>
+    </table> -->
 
-    </div>
+    </div> 
 </div>
 
 {{>layout/footer}}
