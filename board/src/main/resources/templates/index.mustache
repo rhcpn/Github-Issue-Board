@@ -1,0 +1,41 @@
+{{>layout/header}}
+
+<h1>Issue Board</h1>
+<div class="col-md-12">
+    <div class="row">
+        <div class="col-md-6">
+            <form action="/list" method="POST">
+                <div class="form-group">
+                    <input type="text" class="form-control" name="token" placeholder="토큰 값을 입력하세요">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="repo" placeholder="owner/repo">
+                </div>
+            <button type="submit" class="btn btn-primary" name=btn-save>등록</button>
+            </form>
+        </div>
+        
+
+
+    <table class="table table-horizontal table-bordered">
+        {{#issue}}
+        <tr>
+            <td>{{number}}</td>
+            <td>{{title}}</td>
+            <td>{{state}}</td>
+            <td>{{created_at}}</td>
+            <td>{{user.login}}</td>
+        
+            <td>
+                {{#labels}}
+                   <button type="button" class="btn btn-danger">{{name}}</button>
+                {{/labels}}
+            </td>
+        </tr>
+        {{/issue}}
+    </table>
+
+    </div>
+</div>
+
+{{>layout/footer}}
