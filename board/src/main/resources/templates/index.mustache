@@ -2,70 +2,29 @@
 
 <h1>Issue Board</h1>
 <div class="col-md-12">
+    
     <div class="row">
         <div class="col-md-6">
-            {{^repo}}
-            <form action="/list" method="POST">
+            <form>
                 <div class="form-group">
-                    <input type="text" class="form-control" name="token" placeholder="토큰 값을 입력하세요">
+                    <input type="text" class="form-control" id="token" placeholder="토큰 값을 입력하세요">
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control" name="repo" placeholder="owner/repo">
+                    <input type="text" class="form-control" id="repo" placeholder="owner/repo">
                 </div>
-            <button type="submit" class="btn btn-primary" name=btn-save>등록</button>
+            <button type="button" class="btn btn-primary" id="btn-list" onclick="javascript:printList();">조회</button>
             </form>
-            {{/repo}}
-            {{#repo}}
-                <h3 class="text-primary">{{repo}}</h3>
-            {{/repo}}
+            
         </div>
-    </div>
-    <div class="row">
-        {{#repo}}
-        {{#token}}
-        <div class="col-md-4">
-            <a href="/open?repo={{repo}}&token={{token}}" class="text-danger">Open</a> /
-            <a href="/closed?repo={{repo}}&token={{token}}" class="text-danger">Closed</a>
-        </div>
-        {{/token}}
-        {{/repo}}
-    </div>
+    </div> 
     <div class="row">
         <div class="col-md-12">
             <div class="list-group">
-                {{#issue}}
-                <a href="{{html_url}}" class="list-group-item list-group-item-action">
-                    <code>{{number}}</code>
-                    <p class="font-weight-bold">{{title}}</p>
-                    {{created_at}}
-                    <code>{{user.login}}</code>
-                    {{#labels}}
-                    <span class="badge badge-warning">{{name}}</span>
-                    {{/labels}}
-                    {{open_issues_count}}
-                </a>
-                {{/issue}}
+                
             </div>
         </div>
 
-    <!-- <table class="table table-horizontal table-bordered">
-        {{#issue}}
-        <tr>
-            <td>{{number}}</td>
-            <td>{{title}}</td>
-            <td>{{created_at}}</td>
-            <td>{{user.login}}</td>
-        
-            <td>
-                {{#labels}}
-                   <button type="button" class="btn btn-danger">{{name}}</button>
-                {{/labels}}
-            </td>
-        </tr>
-        {{/issue}}
-    </table> -->
-
-    </div> 
+    </div>
 </div>
 
 {{>layout/footer}}
