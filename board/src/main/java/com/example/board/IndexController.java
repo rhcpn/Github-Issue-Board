@@ -23,13 +23,17 @@ public class IndexController {
 
     @ResponseBody
     @GetMapping("/list")
-    public JSONArray printList(Model model, String token, String urlString) throws Exception {
-
-        // 라벨 리스트
-        /* JSONArray labelArray = listService.getList(urlString + "/labels", token);
-        model.addAttribute("labelList", labelArray); */
+    public JSONArray printList(String token, String urlString) throws Exception {
 
         return listService.getList(urlString, token);
     }
+
+    @ResponseBody
+    @GetMapping("/label")
+    public JSONArray printLabel(String token, String urlString) throws Exception {
+
+        return listService.getLabel(urlString, token);
+    }
+
 
 }
