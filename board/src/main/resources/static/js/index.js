@@ -6,17 +6,18 @@ $(document).ready(function() {
     });
 
     $('#btn-all').click(function(){
-        printList();
+        const state = $('#btn-all').val();
+        printList(state);
     });
 
     $('#btn-open').click(function () { 
         const state = $('#btn-open').val();
         printList(state);
-        console.log("오픈");        
     });
 
     $('#btn-close').click(function () { 
-        printList();        
+        const state = $('#btn-close').val();
+        printList(state);        
     });
 
 
@@ -25,7 +26,7 @@ $(document).ready(function() {
 
         var token = $('#token').val();
         var repo = $('#repo').val();
-        var urlString = "https://api.github.com/repos/"+repo+"/issues?" + state;
+        var urlString = "https://api.github.com/repos/"+repo+"/issues?per_page=100" + state;
         var url = "/list";
 
         $.ajax({
@@ -101,7 +102,7 @@ $(document).ready(function() {
                     alert("잘못된 요청입니다.");
                 },
                 500 : function(response) {
-                    alert("서버가 잘못되었습니다.");
+                    alert("서버가 응답하지않습니다.");
                 }
             },
             success: function (response) {
