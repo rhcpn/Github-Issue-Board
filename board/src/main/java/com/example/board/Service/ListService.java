@@ -4,60 +4,57 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.springframework.stereotype.Service;
-
 
 @Service
 public class ListService {
 
     public static JSONArray urlRequest(URL url, String token) throws Exception {
 
-        String line;
-        StringBuilder sb = new StringBuilder();
+        BufferedReader br = null;
+        JSONArray temp = null;
 
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("GET");
-        con.addRequestProperty("token", token);
+        try {
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("GET");
+            con.addRequestProperty("token", token);
 
-        //System.out.println("[url] " + url);
+            InputStreamReader in = new InputStreamReader(con.getInputStream(), "utf-8");
+            br = new BufferedReader(in);
 
-        InputStreamReader in = new InputStreamReader(con.getInputStream(), "utf-8");
-        BufferedReader br = new BufferedReader(in);
+            String line;
+            StringBuilder sb = new StringBuilder();
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
 
-        while((line = br.readLine() ) != null) {
-            sb.append(line);
+            String lines = sb.toString();
+            JSONParser parser = new JSONParser();
+            Object obj = parser.parse(lines);
+            temp = (JSONArray) obj;
+        } finally {
+            br.close();
         }
 
-        br.close();
-        
-        String lines = sb.toString();
-
-        JSONParser parser = new JSONParser();
-        Object obj = parser.parse(lines);
-        JSONArray temp = (JSONArray)obj;
-
         return temp;
-        
     }
 
-
+    // 이슈 리스트
     public JSONArray getList(String urlString, String token) throws Exception {
-      
+
         JSONArray array = new JSONArray();
-        int i=1;
-        
-        while(true) {
-            URL url = new URL(urlString + "&page=" + i );
+        int i = 1;
+
+        while (true) {
+            URL url = new URL(urlString + "&page=" + i);
 
             JSONArray temp = urlRequest(url, token);
 
-            if(temp.isEmpty()) {
+            if (temp.isEmpty()) {
                 break;
             }
-
             array.addAll(temp);
             i++;
         }
@@ -66,13 +63,13 @@ public class ListService {
 
     }
 
+    // 라벨 리스트
     public JSONArray getLabel(String urlString, String token) throws Exception {
-        
+
         URL url = new URL(urlString);
         JSONArray temp = urlRequest(url, token);
 
         return temp;
-
     }
 
 }
