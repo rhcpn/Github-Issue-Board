@@ -21,12 +21,7 @@
             placeholder="owner/repo"
           />
         </div>
-        <button
-          type="button"
-          class="btn btn-primary"
-          id="btn-list"
-          value="open"
-        >
+        <button type="button" class="btn btn-primary" id="btn-list">
           조회
         </button>
       </form>
@@ -39,9 +34,9 @@
   </div>
   <div class="row">
     <div class="col-md-4" id="state">
-      <button type="button" id="btn-all" value="all">ALL</button> /
-      <button type="button" id="btn-open" value="open">OPEN</button> /
-      <button type="button" id="btn-close" value="closed">CLOSED</button>
+      <button type="button" id="btn-all" value="&state=all">ALL</button> /
+      <button type="button" id="btn-open" value="&state=open">OPEN</button> /
+      <button type="button" id="btn-close" value="&state=closed">CLOSED</button>
     </div>
     <div class="col-md-12">
       <div class="list-group"></div>

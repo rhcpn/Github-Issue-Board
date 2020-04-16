@@ -1,24 +1,31 @@
 $(document).ready(function () {
   let state;
+  let label;
   $("#btn-list").click(function () {
-    state = $("#btn-list").val();
-    printList(state);
+    /*printList();*/
     printLabel();
   });
 
   $("#btn-all").click(function () {
     state = $("#btn-all").val();
-    printList(state);
+    printList(label, state);
   });
 
   $("#btn-open").click(function () {
     state = $("#btn-open").val();
-    printList(state);
+    printList(label, state);
   });
 
   $("#btn-close").click(function () {
     state = $("#btn-close").val();
-    printList(state);
+    printList(label, state);
+  });
+
+  $(document).on("click", "#btn-label", function () {
+    label = $(this).val();
+    state = "&state=open";
+    console.log($(this).val());
+    printList(label, state);
   });
 
   // ajax 요청
@@ -47,13 +54,14 @@ $(document).ready(function () {
   }
 
   // 이슈 리스트
-  function printList(state) {
+  function printList(label, state) {
     const token = $("#token").val();
     const repo = $("#repo").val();
     const urlString =
       "https://api.github.com/repos/" +
       repo +
-      "/issues?per_page=100&state=" +
+      "/issues?per_page=100" +
+      label +
       state;
     const url = "/list";
 
@@ -100,16 +108,18 @@ $(document).ready(function () {
     const urlStringLabel =
       "https://api.github.com/repos/mobigen/IRIS-BigData-Platform/labels";
 
+    console.log(urlStringLabel);
+
     ajaxRequest(token, repo, urlLabel, urlStringLabel, function (array) {
       for (var i = 0; i < array.length; i++) {
         $(".label-group").append(
-          "<a href='javascript:printList();'" +
-            "<span class= 'badge' style='background-color: #" +
+          "<button type='button' class='badge' id='btn-label' value='&labels=" +
+            array[i].name +
+            "' style='background-color: #" +
             array[i].color +
             ";'>" +
             array[i].name +
-            "</span>" +
-            "</a>"
+            "</button>"
         );
       }
     });
