@@ -29,35 +29,27 @@ $(document).ready(function () {
   });
 
   // ajax 요청
-  let promise = function (token, url, urlString) {
-    return new Promise(function (resolve, reject) {
-      $.ajax({
-        type: "GET",
-        url: url,
-        dataType: "json",
-        contentType: "application/json; charset=utf-8",
-        data: { token: token, urlString: urlString },
-        statusCode: {
-          403: function (response) {
-            alert("권한이 없습니다.");
-          },
-          404: function (response) {
-            alert("잘못된 요청입니다.");
-          },
-          500: function (response) {
-            alert("서버가 응답하지않습니다.");
-          },
+  function ajaxRequest(token, url, urlString) {
+    var result;
+    return (result = $.ajax({
+      type: "GET",
+      url: url,
+      dataType: "json",
+      contentType: "application/json; charset=utf-8",
+      data: { token: token, urlString: urlString },
+      statusCode: {
+        403: function (response) {
+          alert("권한이 없습니다.");
         },
-        success: function (response) {
-          if (response != null) {
-            resolve(response);
-          } else {
-            reject("값이 없습니다.");
-          }
+        404: function (response) {
+          alert("잘못된 요청입니다.");
         },
-      });
-    });
-  };
+        500: function (response) {
+          alert("서버가 응답하지않습니다.");
+        },
+      },
+    }));
+  }
 
   // 이슈 리스트
   function printList(label, state) {
@@ -73,7 +65,7 @@ $(document).ready(function () {
 
     console.log(urlString);
 
-    promise(token, url, urlString).then(
+    ajaxRequest(token, url, urlString).then(
       function (array) {
         $("#list-form").hide();
         $(".list-group").html("");
@@ -119,7 +111,7 @@ $(document).ready(function () {
     const urlStringLabel =
       "https://api.github.com/repos/mobigen/IRIS-BigData-Platform/labels";
 
-    promise(token, urlLabel, urlStringLabel).then(
+    ajaxRequest(token, urlLabel, urlStringLabel).then(
       function (array) {
         for (var i = 0; i < array.length; i++) {
           $(".label-group").append(

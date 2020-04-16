@@ -33,13 +33,16 @@ public class ListService {
             System.out.println("url : " + url);
 
             String lines = sb.toString();
-            if (lines != null) {
-                JSONParser parser = new JSONParser();
-                Object obj = parser.parse(lines);
-                if (obj != null) {
-                    temp = (JSONArray) obj;
-                }
+            if (lines == null) {
+                return null;
             }
+            JSONParser parser = new JSONParser();
+            Object obj = parser.parse(lines);
+            if (obj == null) {
+                return null;
+            }
+            temp = (JSONArray) obj;
+
         } finally {
             br.close();
         }
@@ -58,7 +61,7 @@ public class ListService {
 
             JSONArray temp = urlRequest(url, token);
 
-            if (temp.isEmpty()) {
+            if (temp.isEmpty() || temp == null) {
                 break;
             }
             array.addAll(temp);
