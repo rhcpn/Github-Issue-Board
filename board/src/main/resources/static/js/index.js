@@ -29,7 +29,7 @@ $(document).ready(function () {
   });
 
   // ajax 요청
-  let promise = function (token, url, urlString, resolve, reject) {
+  let promise = function (token, url, urlString) {
     return new Promise(function (resolve, reject) {
       $.ajax({
         type: "GET",
