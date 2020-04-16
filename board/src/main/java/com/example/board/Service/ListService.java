@@ -24,16 +24,22 @@ public class ListService {
             InputStreamReader in = new InputStreamReader(con.getInputStream(), "utf-8");
             br = new BufferedReader(in);
 
-            String line;
+            String line = null;
             StringBuilder sb = new StringBuilder();
             while ((line = br.readLine()) != null) {
                 sb.append(line);
             }
 
+            System.out.println("url : " + url);
+
             String lines = sb.toString();
-            JSONParser parser = new JSONParser();
-            Object obj = parser.parse(lines);
-            temp = (JSONArray) obj;
+            if (lines != null) {
+                JSONParser parser = new JSONParser();
+                Object obj = parser.parse(lines);
+                if (obj != null) {
+                    temp = (JSONArray) obj;
+                }
+            }
         } finally {
             br.close();
         }
