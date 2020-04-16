@@ -1,37 +1,52 @@
 {{>layout/header}}
 
 <h1>Issue Board</h1>
-<div class="col-md-12">   
-    <div class="row">
-        <div class="col-md-6">
-            <form id="list-form">
-                <div class="form-group">
-                    <input type="text" class="form-control" id="token" placeholder="토큰 값을 입력하세요">
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" id="repo" placeholder="owner/repo">
-                </div>
-            <button type="button" class="btn btn-primary" id="btn-list" value="">조회</button>
-            </form>
-            
+<div class="col-md-12">
+  <div class="row">
+    <div class="col-md-6">
+      <form id="list-form">
+        <div class="form-group">
+          <input
+            type="text"
+            class="form-control"
+            id="token"
+            placeholder="토큰 값을 입력하세요"
+          />
         </div>
-    </div> 
-    <div class="row">
-        <div class="col-md-6">
-            <div class="label-group"></div>
+        <div class="form-group">
+          <input
+            type="text"
+            class="form-control"
+            id="repo"
+            placeholder="owner/repo"
+          />
         </div>
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="btn-list"
+          value="open"
+        >
+          조회
+        </button>
+      </form>
     </div>
-    <div class="row">
-        <div class="col-md-4" id="state">
-            <button type="button" id="btn-all" value="state=all">ALL</button> /
-            <button type="button" id="btn-open" value="state=open">OPEN</button> /
-            <button type="button" id="btn-close" value="state=closed">CLOSED</button> 
-        </div>
-        <div class="col-md-12">
-            <div class="list-group"></div>
-        </div>
-
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="label-group"></div>
     </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4" id="state">
+      <button type="button" id="btn-all" value="all">ALL</button> /
+      <button type="button" id="btn-open" value="open">OPEN</button> /
+      <button type="button" id="btn-close" value="closed">CLOSED</button>
+    </div>
+    <div class="col-md-12">
+      <div class="list-group"></div>
+    </div>
+  </div>
 </div>
 
 {{>layout/footer}}

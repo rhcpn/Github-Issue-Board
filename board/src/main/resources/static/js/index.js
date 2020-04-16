@@ -1,21 +1,23 @@
 $(document).ready(function () {
+  let state;
   $("#btn-list").click(function () {
-    printList();
+    state = $("#btn-list").val();
+    printList(state);
     printLabel();
   });
 
   $("#btn-all").click(function () {
-    const state = $("#btn-all").val();
+    state = $("#btn-all").val();
     printList(state);
   });
 
   $("#btn-open").click(function () {
-    const state = $("#btn-open").val();
+    state = $("#btn-open").val();
     printList(state);
   });
 
   $("#btn-close").click(function () {
-    const state = $("#btn-close").val();
+    state = $("#btn-close").val();
     printList(state);
   });
 
@@ -26,8 +28,7 @@ $(document).ready(function () {
       url: url,
       dataType: "json",
       contentType: "application/json; charset=utf-8",
-      data: { token: token, repo: repo, urlString: urlString },
-      headers: { Authorization: token },
+      data: { token: token, urlString: urlString },
       statusCode: {
         403: function (response) {
           alert("권한이 없습니다.");
@@ -50,9 +51,13 @@ $(document).ready(function () {
     const token = $("#token").val();
     const repo = $("#repo").val();
     const urlString =
-      "https://api.github.com/repos/" + repo + "/issues?per_page=100" + state;
+      "https://api.github.com/repos/" +
+      repo +
+      "/issues?per_page=100&state=" +
+      state;
     const url = "/list";
 
+    console.log(urlString);
     ajaxRequest(token, repo, url, urlString, function (array) {
       $("#list-form").hide();
       $(".list-group").html("");
