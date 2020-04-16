@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ListService {
 
-    public static JSONArray urlRequest(URL url, String token) throws Exception {
+    public JSONArray urlRequest(URL url, String token) throws Exception {
 
         BufferedReader br = null;
         JSONArray temp = null;
