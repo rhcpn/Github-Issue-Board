@@ -22,14 +22,14 @@ public class IndexController {
 
     @ResponseBody
     @GetMapping("/list")
-    public JSONArray printList(String token, String urlString) throws Exception {
+    public JSONArray printList(String urlString, String token) throws Exception {
 
         return listService.getList(urlString, token);
     }
 
     @ResponseBody
     @GetMapping("/label")
-    public JSONArray printLabel(String token, String urlString) throws Exception {
+    public JSONArray printLabel(String urlString, String token) throws Exception {
 
         return listService.getLabel(urlString, token);
     }
