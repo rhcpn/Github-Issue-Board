@@ -30,8 +30,6 @@ public class ListService {
                 sb.append(line);
             }
 
-            System.out.println("url : " + url);
-
             String lines = sb.toString();
             if (lines == null) {
                 return null;
@@ -44,7 +42,10 @@ public class ListService {
             temp = (JSONArray) obj;
 
         } finally {
-            br.close();
+            if (br != null) {
+                br.close();
+            }
+
         }
 
         return temp;
