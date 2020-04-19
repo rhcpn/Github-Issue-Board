@@ -34,4 +34,10 @@ public class IndexController {
         return listService.getLabel(urlString, token);
     }
 
+    @ResponseBody
+    @GetMapping("/chart")
+    public JSONArray printChart(String urlString, String token) throws Exception {
+        return listService.getChart(urlString, token);
+    }
+
 }

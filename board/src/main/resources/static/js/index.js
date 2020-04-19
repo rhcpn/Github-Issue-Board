@@ -3,8 +3,9 @@ let state;
 let label;
 
 $("#btn-list").click(function () {
-  printList();
+  //printList();
   printLabel();
+  $("#btn-chart").show();
 });
 
 $("#btn-all").click(function () {
