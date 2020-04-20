@@ -1,19 +1,23 @@
+// issue label & state
 let state;
 let label;
 
+// token & repo name
 let token;
 let repo;
+
+var loader = $("div.loader");
+// 차트 영역, chart 버튼, all / open / closed 버튼 숨기기
 $(".highcharts-figure").hide();
 $("#btn-chart").hide();
 $("#state").hide();
 
+// 리스트 조회 클릭 시
 $("#btn-list").click(function () {
   token = $("#token").val();
   repo = $("#repo").val();
-  //printList();
+  printList();
   printLabel();
-  $("#btn-chart").show();
-  $("#state").show();
 });
 
 $("#btn-all").click(function () {
@@ -34,7 +38,6 @@ $("#btn-close").click(function () {
 $(document).on("click", "#btn-label", function () {
   label = $(this).val();
   state = "&state=open";
-  console.log($(this).val());
   printList(label, state);
 });
 
@@ -47,6 +50,9 @@ function ajaxRequest(token, url, urlString) {
     dataType: "json",
     contentType: "application/json; charset=utf-8",
     data: { token: token, urlString: urlString },
+    beforeSend: function () {
+      loader.css("display", "block");
+    },
     statusCode: {
       403: function (response) {
         alert("권한이 없습니다.");
@@ -75,6 +81,10 @@ function printList(label, state) {
 
   ajaxRequest(token, url, urlString).then(
     function (array) {
+      loader.css("display", "none");
+
+      $("#btn-chart").show();
+      $("#state").show();
       $("#list-form").hide();
       $(".list-group").html("");
 
@@ -119,6 +129,8 @@ function printLabel() {
 
   ajaxRequest(token, urlLabel, urlStringLabel).then(
     function (array) {
+      //loader.css("display", "none");
+
       for (var i = 0; i < array.length; i++) {
         $(".label-group").append(
           "<button type='button' class='badge' id='btn-label' value='&labels=" +

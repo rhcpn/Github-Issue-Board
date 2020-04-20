@@ -1,8 +1,6 @@
 $(document).ready(function () {
   $("#btn-chart").click(function () {
-    //$(".highcharts-figure").toggle(function () {
     showChart();
-    // });
   });
 
   let today = moment().format("YYYY / MM / DD");
@@ -11,15 +9,19 @@ $(document).ready(function () {
   let today_3 = moment().subtract(3, "days").format("YYYY / MM / DD");
   let today_4 = moment().subtract(4, "days").format("YYYY / MM / DD");
 
+  // 차트 open
   function showChart() {
     const urlString =
       "https://api.github.com/repos/" + repo + "/issues?per_page=100&state=all";
     const url = "/chart";
 
     ajaxRequest(token, url, urlString).then(function (array) {
+      loader.css("display", "none");
+      $(".highcharts-figure").show();
       const openCount = Number(array[0].openCount);
       const closedCount = Number(array[0].closedCount);
       const allCount = openCount + closedCount;
+      console.log(array);
 
       Highcharts.chart("container", {
         title: {
@@ -74,17 +76,17 @@ $(document).ready(function () {
               {
                 name: "All",
                 y: allCount,
-                color: Highcharts.getOptions().colors[5], // Jane's color
+                color: Highcharts.getOptions().colors[5],
               },
               {
                 name: "Open",
                 y: openCount,
-                color: Highcharts.getOptions().colors[0], // John's color
+                color: Highcharts.getOptions().colors[0],
               },
               {
                 name: "Closed",
                 y: closedCount,
-                color: Highcharts.getOptions().colors[1], // Joe's color
+                color: Highcharts.getOptions().colors[1],
               },
             ],
             center: [100, 80],
