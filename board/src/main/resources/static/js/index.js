@@ -1,11 +1,19 @@
-//$(document).ready(function () {
 let state;
 let label;
 
+let token;
+let repo;
+$(".highcharts-figure").hide();
+$("#btn-chart").hide();
+$("#state").hide();
+
 $("#btn-list").click(function () {
+  token = $("#token").val();
+  repo = $("#repo").val();
   //printList();
   printLabel();
   $("#btn-chart").show();
+  $("#state").show();
 });
 
 $("#btn-all").click(function () {
@@ -55,8 +63,6 @@ function ajaxRequest(token, url, urlString) {
 
 // 이슈 리스트
 function printList(label, state) {
-  const token = $("#token").val();
-  const repo = $("#repo").val();
   const urlString =
     "https://api.github.com/repos/" +
     repo +
@@ -107,8 +113,6 @@ function printList(label, state) {
 
 // 라벨 리스트
 function printLabel() {
-  const token = $("#token").val();
-  const repo = $("#repo").val();
   const urlLabel = "/label";
   const urlStringLabel =
     "https://api.github.com/repos/mobigen/IRIS-BigData-Platform/labels";
@@ -132,4 +136,3 @@ function printLabel() {
     }
   );
 }
-//});

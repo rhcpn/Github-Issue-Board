@@ -90,30 +90,29 @@ public class ListService {
     // 차트
     public JSONArray getChart(String urlString, String token) throws Exception {
 
-        JSONArray array = new JSONArray();
-        int i = 1;
-
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         // 오늘
         Calendar ca = Calendar.getInstance();
         String today = dateFormat.format(ca.getTime());
         // 1일전
         ca.add(Calendar.DATE, -1);
-        String before1Day = dateFormat.format(ca.getTime());
+        String today_1 = dateFormat.format(ca.getTime());
         // 2일전
         ca.add(Calendar.DATE, -1);
-        String before2Day = dateFormat.format(ca.getTime());
+        String today_2 = dateFormat.format(ca.getTime());
         // 3일전
         ca.add(Calendar.DATE, -1);
-        String before3Day = dateFormat.format(ca.getTime());
+        String today_3 = dateFormat.format(ca.getTime());
         // 4일전
         ca.add(Calendar.DATE, -1);
-        String before4Day = dateFormat.format(ca.getTime());
+        String today_4 = dateFormat.format(ca.getTime());
 
-        int count1 = 0, count2 = 0, count3 = 0, count4 = 0, count5 = 0;
-        int count6 = 0, count7 = 0, count8 = 0, count9 = 0, count10 = 0;
-        int closedCount = 0;
+        // 해당 날짜 open, closed 이슈 count
         int openCount = 0;
+        int closedCount = 0;
+        // open, closed 총 이슈 count
+        int closed = 0;
+        int open = 0;
 
         JSONObject list1 = new JSONObject();
         JSONObject list2 = new JSONObject();
@@ -121,49 +120,80 @@ public class ListService {
         JSONObject list4 = new JSONObject();
         JSONObject list5 = new JSONObject();
 
+        JSONArray array = new JSONArray();
+        int i = 1;
+
         while (true) {
             URL url = new URL(urlString + "&page=" + i);
             JSONArray temp = urlRequest(url, token);
 
+            if (temp.isEmpty() || temp == null) {
+                break;
+            }
+
+            // close날짜, open 날짜 비교
             for (int j = 0; j < temp.size(); j++) {
                 JSONObject ob = (JSONObject) temp.get(j);
                 String state = (String) ob.get("closed_at");
 
+                // closed_at == null , open 이슈
                 if (state == null) {
-                    openCount++;
+                    open++;
                     state = (String) ob.get("created_at");
 
                     Date date = dateFormat.parse(state);
                     String issueDate = dateFormat.format(date);
 
                     if (issueDate.equals(today)) {
-                        count1++;
-                        list1.put("created_at", count1);
-                    } else if (issueDate.equals(before1Day)) {
-                        count2++;
-                        list2.put("created_at", count2);
-                    } else if (issueDate.equals(before2Day)) {
-                        count3++;
-                        list3.put("created_at", count3);
-                    } else if (issueDate.equals(before3Day)) {
-                        count4++;
-                        list4.put("created_at", count4);
-                    } else if (issueDate.equals(before4Day)) {
-                        count5++;
-                        list5.put("created_at", count5);
+                        openCount++;
+                        list1.put("created_at", openCount);
+                    } else if (issueDate.equals(today_1)) {
+                        openCount++;
+                        list2.put("created_at", openCount);
+                    } else if (issueDate.equals(today_2)) {
+                        openCount++;
+                        list3.put("created_at", openCount);
+                    } else if (issueDate.equals(today_3)) {
+                        openCount++;
+                        list4.put("created_at", openCount);
+                    } else if (issueDate.equals(today_4)) {
+                        openCount++;
+                        list5.put("created_at", openCount);
+                    }
+                }
+                // closed 이슈
+                else {
+                    closed++;
+
+                    Date date = dateFormat.parse(state);
+                    String issueDate = dateFormat.format(date);
+
+                    if (issueDate.equals(today)) {
+                        closedCount++;
+                        list1.put("closed_at", closedCount);
+                    } else if (issueDate.equals(today_1)) {
+                        closedCount++;
+                        list2.put("closed_at", closedCount);
+                    } else if (issueDate.equals(today_2)) {
+                        closedCount++;
+                        list3.put("closed_at", closedCount);
+                    } else if (issueDate.equals(today_3)) {
+                        closedCount++;
+                        list4.put("closed_at", closedCount);
+                    } else if (issueDate.equals(today_4)) {
+                        closedCount++;
+                        list5.put("closed_at", closedCount);
                     }
                 }
 
             }
 
-            if (temp.isEmpty() || temp == null) {
-                break;
-            }
             i++;
         }
-        list1.put("openCount", openCount);
-        // list1.put("closedCount", closedCount);
+        list1.put("openCount", open);
+        list1.put("closedCount", closed);
         System.out.println("총 이슈 :" + openCount);
+        System.out.println("닫힌 이슈 :" + closedCount);
         array.add(list1);
         array.add(list2);
         array.add(list3);

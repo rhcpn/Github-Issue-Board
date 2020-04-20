@@ -1,10 +1,8 @@
 $(document).ready(function () {
-  $(".highcharts-figure").hide();
-  $("#btn-chart").hide();
   $("#btn-chart").click(function () {
-    $(".highcharts-figure").toggle(function () {
-      showChart();
-    });
+    //$(".highcharts-figure").toggle(function () {
+    showChart();
+    // });
   });
 
   let today = moment().format("YYYY / MM / DD");
@@ -14,17 +12,15 @@ $(document).ready(function () {
   let today_4 = moment().subtract(4, "days").format("YYYY / MM / DD");
 
   function showChart() {
-    const token = $("#token").val();
-    const repo = $("#repo").val();
     const urlString =
-      "https://api.github.com/repos/" +
-      repo +
-      "/issues?per_page=100&state=open" +
-      label +
-      state;
+      "https://api.github.com/repos/" + repo + "/issues?per_page=100&state=all";
     const url = "/chart";
 
     ajaxRequest(token, url, urlString).then(function (array) {
+      const openCount = Number(array[0].openCount);
+      const closedCount = Number(array[0].closedCount);
+      const allCount = openCount + closedCount;
+
       Highcharts.chart("container", {
         title: {
           text: "Issue Chart",
@@ -52,12 +48,24 @@ $(document).ready(function () {
           {
             type: "column",
             name: "Open",
-            data: [9, 9, 9, 9, 9],
+            data: [
+              Number(array[4].created_at),
+              Number(array[3].created_at),
+              Number(array[2].created_at),
+              Number(array[1].created_at),
+              Number(array[0].created_at),
+            ],
           },
           {
             type: "column",
             name: "Closed",
-            data: [4, 3, 3, 9, 0],
+            data: [
+              Number(array[4].closed_at),
+              Number(array[3].closed_at),
+              Number(array[2].closed_at),
+              Number(array[1].closed_at),
+              Number(array[0].closed_at),
+            ],
           },
           {
             type: "pie",
@@ -65,17 +73,17 @@ $(document).ready(function () {
             data: [
               {
                 name: "All",
-                y: 13,
+                y: allCount,
                 color: Highcharts.getOptions().colors[5], // Jane's color
               },
               {
                 name: "Open",
-                y: 200,
+                y: openCount,
                 color: Highcharts.getOptions().colors[0], // John's color
               },
               {
                 name: "Closed",
-                y: 19,
+                y: closedCount,
                 color: Highcharts.getOptions().colors[1], // Joe's color
               },
             ],
