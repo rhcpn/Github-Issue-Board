@@ -2,14 +2,21 @@ package com.example.board.Service;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
+import java.util.Map.Entry;
+
+import com.google.gson.JsonArray;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -91,18 +98,17 @@ public class ListService {
     }
 
     // 차트
-    public JSONArray getChart(String urlString, String token) throws Exception {
+    public ArrayList getChart(String urlString, String token) throws Exception {
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
-        JSONArray array = new JSONArray();
-        Map<String, Integer> openMap = new LinkedHashMap<>();
-        Map<String, Integer> closedMap = new LinkedHashMap<>();
+        Map<String, Map<String, Integer>> result = new LinkedHashMap<>();
+        // open, close array
+        ArrayList<Map<String, Integer>> array = new ArrayList<>();
+        // 날짜 array
+        ArrayList<String> date = new ArrayList<>();
+
         int i = 1;
-        int openCount = 1;
-        int closedCount = 1;
-        int openIssue = 0;
-        int closedIssue = 0;
 
         while (true) {
             URL url = new URL(urlString + "&page=" + i);
@@ -112,44 +118,83 @@ public class ListService {
                 break;
             }
 
-            // close날짜, open 날짜 비교
+            // map 에 open / closed 날짜 put
             for (int j = 0; j < temp.size(); j++) {
                 JSONObject ob = (JSONObject) temp.get(j);
-                String state = (String) ob.get("closed_at");
 
-                if (state == null) {
-                    openIssue++;
-                    state = (String) ob.get("created_at");
-                    String date = format.format(format.parse(state));
-
-                    if (openMap.containsKey(date)) {
-                        openMap.put(date, ++openCount);
-                        continue;
-                    }
-
-                    openMap.put(date, openCount);
-
-                } else {
-                    closedIssue++;
-                    String date = format.format(format.parse(state));
-
-                    if (closedMap.containsKey(date)) {
-                        closedMap.put(date, ++closedCount);
-                        continue;
-                    }
-                    closedMap.put(date, closedCount);
+                // 날짜 포맷
+                String closeAt = (String) ob.get("closed_at");
+                if (closeAt != null) {
+                    closeAt = format.format(format.parse(closeAt));
+                }
+                String createAt = (String) ob.get("created_at");
+                if (createAt != null) {
+                    createAt = format.format(format.parse(createAt));
                 }
 
+                Map<String, Integer> createItem = result.get(createAt);
+                Map<String, Integer> closeItem = result.get(closeAt);
+
+                // close 이슈의 close 날짜
+                if (closeAt != null) {
+
+                    // 키가 없으면
+                    if (closeItem == null) {
+
+                        closeItem = new HashMap<String, Integer>();
+                        closeItem.put("open", 0);
+                        closeItem.put("close", 0);
+                        result.put(closeAt, closeItem);
+
+                        // open, closed , 날짜 array 저장
+                        array.add(closeItem);
+                        date.add(closeAt);
+                    }
+                    createItem = result.get(createAt);
+                    closeItem.put("close", closeItem.get("close") + 1);
+                }
+                // open, close 이슈의 open 날짜
+                if (createItem == null) {
+
+                    createItem = new HashMap<String, Integer>();
+                    createItem.put("open", 0);
+                    createItem.put("close", 0);
+                    result.put(createAt, createItem);
+
+                    // open, closed , 날짜 array 저장
+                    array.add(createItem);
+                    date.add(createAt);
+                }
+                if (createItem.get("open") != null) {
+                    createItem.put("open", createItem.get("open") + 1);
+
+                }
             }
 
             i++;
         }
-        openMap.put("openIssue", openIssue);
-        closedMap.put("closedIssue", closedIssue);
-        array.add(openMap);
-        array.add(closedMap);
 
-        return array;
+        ArrayList<Object> open = new ArrayList<>();
+        ArrayList<Object> close = new ArrayList<>();
+
+        // open 수 , close 수 각각 리스트에 담기
+        for (int j = 0; j < array.size(); j++) {
+            Map<String, Integer> m = (Map<String, Integer>) array.get(j);
+            open.add(m.get("open"));
+            close.add(m.get("close"));
+        }
+
+        ArrayList<Object> results = new ArrayList<>();
+
+        Collections.reverse(date);
+        Collections.reverse(open);
+        Collections.reverse(close);
+
+        results.add(date);
+        results.add(open);
+        results.add(close);
+
+        return results;
     }
 
 }

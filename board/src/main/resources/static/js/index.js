@@ -12,12 +12,20 @@ $(".highcharts-figure").hide();
 $("#btn-chart").hide();
 $("#state").hide();
 
+// Issue Board, home 클릭 시
+$("#board").click(function () {
+  state = "";
+  label = "";
+  printList();
+});
+
 // 리스트 조회 클릭 시
 $("#btn-list").click(function () {
   token = $("#token").val();
   repo = $("#repo").val();
   printList();
   printLabel();
+  $("#btn-chart").show();
 });
 
 $("#btn-all").click(function () {
@@ -83,7 +91,6 @@ function printList(label, state) {
     function (array) {
       loader.css("display", "none");
 
-      $("#btn-chart").show();
       $("#state").show();
       $("#list-form").hide();
       $(".list-group").html("");
@@ -129,7 +136,7 @@ function printLabel() {
 
   ajaxRequest(token, urlLabel, urlStringLabel).then(
     function (array) {
-      //loader.css("display", "none");
+      loader.css("display", "none");
 
       for (var i = 0; i < array.length; i++) {
         $(".label-group").append(
