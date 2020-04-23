@@ -1,5 +1,10 @@
 package com.example.board;
 
+import java.util.ArrayList;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
+
 import com.example.board.Service.ListService;
 
 import org.json.simple.JSONArray;
@@ -36,7 +41,7 @@ public class IndexController {
 
     @ResponseBody
     @GetMapping("/chart")
-    public JSONArray printChart(String urlString, String token) throws Exception {
+    public ArrayList<Object> printChart(String urlString, String token) throws Exception {
         return listService.getChart(urlString, token);
     }
 

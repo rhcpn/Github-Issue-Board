@@ -2,22 +2,15 @@ package com.example.board.Service;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
-import java.util.Map.Entry;
-
-import com.google.gson.JsonArray;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -97,15 +90,25 @@ public class ListService {
         return temp;
     }
 
-    // 차트
-    public ArrayList getChart(String urlString, String token) throws Exception {
+    // 날짜 포맷
+    public String formatDate(String date) throws ParseException {
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
+        if (date != null) {
+            date = format.format(format.parse(date));
+        }
+
+        return date;
+    }
+
+    // 차트
+    public ArrayList<Object> getChart(String urlString, String token) throws Exception {
+
         Map<String, Map<String, Integer>> result = new LinkedHashMap<>();
-        // open, close array
+        // open, close 리스트
         ArrayList<Map<String, Integer>> array = new ArrayList<>();
-        // 날짜 array
+        // 날짜 리스트
         ArrayList<String> date = new ArrayList<>();
 
         int i = 1;
@@ -124,13 +127,9 @@ public class ListService {
 
                 // 날짜 포맷
                 String closeAt = (String) ob.get("closed_at");
-                if (closeAt != null) {
-                    closeAt = format.format(format.parse(closeAt));
-                }
                 String createAt = (String) ob.get("created_at");
-                if (createAt != null) {
-                    createAt = format.format(format.parse(createAt));
-                }
+                closeAt = formatDate(closeAt);
+                createAt = formatDate(createAt);
 
                 Map<String, Integer> createItem = result.get(createAt);
                 Map<String, Integer> closeItem = result.get(closeAt);
