@@ -11,6 +11,7 @@ var loader = $("div.loader");
 $(".highcharts-figure").hide();
 $("#btn-chart").hide();
 $("#state").hide();
+$("#download").hide();
 
 // Issue Board, home 클릭 시
 $("#board").click(function () {
@@ -26,6 +27,7 @@ $("#btn-list").click(function () {
   printList();
   printLabel();
   $("#btn-chart").show();
+  $("#download").show();
 });
 
 $("#btn-all").click(function () {

@@ -1,6 +1,6 @@
 {{>layout/header}}
 
-<h1>Issue Board</h1>
+<h1 id="board">Issue Board</h1>
 <div class="col-md-12">
   <div class="row">
     <div class="col-md-6">
@@ -29,8 +29,12 @@
   </div>
   <div class="row">
     <!-- issue chart -->
-    <div class="com-md-4">
+    <div class="col-md-4">
       <button type="button" class="btn" id="btn-chart">Chart ▼</button>
+    </div>
+    <!-- download csv -->
+    <div class="col-md-4">
+      <button type="button" class="btn" id="download">Download</button>
     </div>
     <div class="col-md-12" id="chart">
       <figure class="highcharts-figure">
