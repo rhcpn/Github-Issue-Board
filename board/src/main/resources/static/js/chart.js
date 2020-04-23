@@ -44,7 +44,7 @@ function showChart() {
           dataLabels: {
             enabled: true,
           },
-          enableMouseTracking: false,
+          enableMouseTracking: true,
         },
       },
       series: [
