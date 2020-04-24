@@ -111,17 +111,19 @@ public class ListService {
             }
 
         } catch (Exception e) {
-            return null;
+            date = null;
         }
         return date;
     }
 
     // 맵에 open, close
-    public void putMap(Map<String, Integer> item) {
+    public Map<String, Integer> putMap(Map<String, Integer> item) {
 
         item = new HashMap<String, Integer>();
         item.put("open", 0);
         item.put("close", 0);
+
+        return item;
     }
 
     // 차트
@@ -148,7 +150,7 @@ public class ListService {
                 JSONObject ob = (JSONObject) temp.get(j);
 
                 if (ob == null) {
-                    break;
+                    continue;
                 }
 
                 // 날짜 포맷
@@ -166,7 +168,7 @@ public class ListService {
                     // 키가 없으면
                     if (closeItem == null) {
 
-                        putMap(closeItem);
+                        closeItem = putMap(closeItem);
                         result.put(closeAt, closeItem);
 
                         // open, closed , 날짜 array 저장
@@ -178,7 +180,7 @@ public class ListService {
                 // open, close 이슈의 open 날짜
                 if (createItem == null) {
 
-                    putMap(createItem);
+                    createItem = putMap(createItem);
                     result.put(createAt, createItem);
 
                     // open, closed , 날짜 array 저장
