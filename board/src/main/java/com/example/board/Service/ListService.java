@@ -107,9 +107,9 @@ public class ListService {
     }
 
     // 맵에 open, close
-    public Map<String, Integer> putMap(Map<String, Integer> item) {
+    public Map<String, Integer> putMap() {
 
-        item = new HashMap<String, Integer>();
+        Map<String, Integer> item = new HashMap<String, Integer>();
         item.put("open", 0);
         item.put("close", 0);
 
@@ -158,7 +158,7 @@ public class ListService {
                     // 키가 없으면
                     if (closeItem == null) {
 
-                        closeItem = putMap(closeItem);
+                        closeItem = putMap();
                         result.put(closeAt, closeItem);
 
                         // open, closed , 날짜 array 저장
@@ -170,7 +170,7 @@ public class ListService {
                 // open, close 이슈의 open 날짜
                 if (createItem == null) {
 
-                    createItem = putMap(createItem);
+                    createItem = putMap();
                     result.put(createAt, createItem);
 
                     // open, closed , 날짜 array 저장
