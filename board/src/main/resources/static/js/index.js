@@ -1,42 +1,68 @@
-$(document).ready(function () {
-  let state;
-  let label;
-  $("#btn-list").click(function () {
-    /*printList();*/
-    printLabel();
-  });
+// issue label & state
+let state = "";
+let label = "";
 
-  $("#btn-all").click(function () {
-    state = $("#btn-all").val();
-    printList(label, state);
-  });
+// token & repo name
+let token;
+let repo;
 
-  $("#btn-open").click(function () {
-    state = $("#btn-open").val();
-    printList(label, state);
-  });
+let loader = $("div.loader");
 
-  $("#btn-close").click(function () {
-    state = $("#btn-close").val();
-    printList(label, state);
-  });
+// 차트 영역, chart 버튼, all / open / closed 버튼 숨기기
+$(".highcharts-figure").hide();
+$("#btn-chart").hide();
+$("#state").hide();
+$("#download").hide();
 
-  $(document).on("click", "#btn-label", function () {
-    label = $(this).val();
-    state = "&state=open";
-    console.log($(this).val());
-    printList(label, state);
-  });
+// Issue Board, home 클릭 시
+$("#board").click(function () {
+  state = "";
+  label = "";
+  printList();
+});
 
-  // ajax 요청
-  function ajaxRequest(token, url, urlString) {
-    var result;
-    return (result = $.ajax({
+// 리스트 조회 클릭 시
+$("#btn-list").click(function () {
+  token = $("#token").val();
+  repo = $("#repo").val();
+  printList();
+  printLabel();
+  $("#list-form").hide();
+});
+
+$("#btn-all").click(function () {
+  state = $("#btn-all").val();
+  printList(label, state);
+});
+
+$("#btn-open").click(function () {
+  state = $("#btn-open").val();
+  printList(label, state);
+});
+
+$("#btn-close").click(function () {
+  state = $("#btn-close").val();
+  printList(label, state);
+});
+
+$(document).on("click", "#btn-label", function () {
+  label = $(this).val();
+  state = "&state=open";
+  printList(label, state);
+});
+
+// ajax 요청
+function ajaxRequest(url, state, label) {
+  return $.ajax(
+    {
       type: "GET",
       url: url,
       dataType: "json",
       contentType: "application/json; charset=utf-8",
-      data: { token: token, urlString: urlString },
+      data: { token: token, url: url, repo: repo, state: state, label: label },
+      beforeSend: function () {
+        loader.css("display", "block");
+      },
       statusCode: {
         403: function (response) {
           alert("권한이 없습니다.");
@@ -48,86 +74,69 @@ $(document).ready(function () {
           alert("서버가 응답하지않습니다.");
         },
       },
-    }));
-  }
+    },
+    function (error) {
+      console.log(error);
+    }
+  ).always(function () {
+    loader.hide();
+  });
+}
 
-  // 이슈 리스트
-  function printList(label, state) {
-    const token = $("#token").val();
-    const repo = $("#repo").val();
-    const urlString =
-      "https://api.github.com/repos/" +
-      repo +
-      "/issues?per_page=100" +
-      label +
-      state;
-    const url = "/list";
+// 이슈 리스트
+function printList(label, state) {
+  const url = "/list";
 
-    console.log(urlString);
+  ajaxRequest(url, state, label).then(function (array) {
+    $("#btn-chart").show();
+    $("#download").show();
+    $("#state").show();
+    $(".list-group").html("");
 
-    ajaxRequest(token, url, urlString).then(
-      function (array) {
-        $("#list-form").hide();
-        $(".list-group").html("");
-
-        for (var i = 0; i < array.length; i++) {
-          var labels = "";
-          for (var j = 0; j < array[i].labels.length; j++) {
-            labels +=
-              "<span class= 'badge' style='background-color: #" +
-              array[i].labels[j].color +
-              ";'>" +
-              array[i].labels[j].name +
-              "</span>";
-          }
-          $(".list-group").append(
-            "<a href='" +
-              array[i].html_url +
-              "' class='list-group-item list-group-item-action'>" +
-              array[i].number +
-              "<p class='font-weight-bold'>" +
-              array[i].title +
-              "</p>" +
-              moment(array[i].created_at).format("YYYY / MM / DD HH:mm") +
-              "<code>" +
-              array[i].user.login +
-              "</code>" +
-              labels +
-              "</a>"
-          );
-        }
-      },
-      function (error) {
-        console.log(error);
+    for (var i = 0; i < array.length; i++) {
+      var labels = "";
+      for (var j = 0; j < array[i].labels.length; j++) {
+        labels +=
+          "<span class= 'badge' style='background-color: #" +
+          array[i].labels[j].color +
+          ";'>" +
+          array[i].labels[j].name +
+          "</span>";
       }
-    );
-  }
+      $(".list-group").append(
+        "<a href='" +
+          array[i].html_url +
+          "' class='list-group-item list-group-item-action'>" +
+          array[i].number +
+          "<p class='font-weight-bold'>" +
+          array[i].title +
+          "</p>" +
+          moment(array[i].created_at).format("YYYY / MM / DD HH:mm") +
+          "<code>" +
+          array[i].user.login +
+          "</code>" +
+          labels +
+          "</a>"
+      );
+    }
+  });
+}
 
-  // 라벨 리스트
-  function printLabel() {
-    const token = $("#token").val();
-    const repo = $("#repo").val();
-    const urlLabel = "/label";
-    const urlStringLabel =
-      "https://api.github.com/repos/mobigen/IRIS-BigData-Platform/labels";
+// 라벨 리스트
+function printLabel() {
+  const url = "/label";
 
-    ajaxRequest(token, urlLabel, urlStringLabel).then(
-      function (array) {
-        for (var i = 0; i < array.length; i++) {
-          $(".label-group").append(
-            "<button type='button' class='badge' id='btn-label' value='&labels=" +
-              array[i].name +
-              "' style='background-color: #" +
-              array[i].color +
-              ";'>" +
-              array[i].name +
-              "</button>"
-          );
-        }
-      },
-      function (error) {
-        console.log(error);
-      }
-    );
-  }
-});
+  ajaxRequest(url, state, label).then(function (array) {
+    for (var i = 0; i < array.length; i++) {
+      $(".label-group").append(
+        "<button type='button' class='badge' id='btn-label' value='&labels=" +
+          array[i].name +
+          "' style='background-color: #" +
+          array[i].color +
+          ";'>" +
+          array[i].name +
+          "</button>"
+      );
+    }
+  });
+}
