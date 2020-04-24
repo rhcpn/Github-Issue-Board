@@ -116,6 +116,14 @@ public class ListService {
         return date;
     }
 
+    // 맵에 open, close
+    public void putMap(Map<String, Integer> item) {
+
+        item = new HashMap<String, Integer>();
+        item.put("open", 0);
+        item.put("close", 0);
+    }
+
     // 차트
     public ArrayList<Object> getChart(String urlString, String token) throws Exception {
 
@@ -158,9 +166,7 @@ public class ListService {
                     // 키가 없으면
                     if (closeItem == null) {
 
-                        closeItem = new HashMap<String, Integer>();
-                        closeItem.put("open", 0);
-                        closeItem.put("close", 0);
+                        putMap(closeItem);
                         result.put(closeAt, closeItem);
 
                         // open, closed , 날짜 array 저장
@@ -172,9 +178,7 @@ public class ListService {
                 // open, close 이슈의 open 날짜
                 if (createItem == null) {
 
-                    createItem = new HashMap<String, Integer>();
-                    createItem.put("open", 0);
-                    createItem.put("close", 0);
+                    putMap(createItem);
                     result.put(createAt, createItem);
 
                     // open, closed , 날짜 array 저장

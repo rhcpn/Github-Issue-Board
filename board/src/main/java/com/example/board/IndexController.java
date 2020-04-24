@@ -25,6 +25,23 @@ public class IndexController {
 
     private final ListService listService;
 
+    public String urlString(String url, String repo, String state, String label) {
+
+        // 이슈 리스트
+        if (url.equals("/list")) {
+            return "https://api.github.com/repos/" + repo + "/issues?per_page=100" + label + state;
+        }
+        // 라벨 리스트
+        else if (url.equals("/label")) {
+            return "https://api.github.com/repos/mobigen/IRIS-BigData-Platform/labels";
+        }
+        // 차트, 다운로드
+        else {
+            return "https://api.github.com/repos/mobigen/IRIS-BigData-Platform/labels";
+        }
+
+    }
+
     @GetMapping("/")
     public String index() {
         return "index";
@@ -32,27 +49,31 @@ public class IndexController {
 
     @ResponseBody
     @GetMapping("/list")
-    public JSONArray printList(String urlString, String token) throws Exception {
+    public JSONArray printList(String token, String url, String repo, String state, String label) throws Exception {
 
+        String urlString = urlString(url, repo, state, label);
         return listService.getList(urlString, token);
     }
 
     @ResponseBody
     @GetMapping("/label")
-    public JSONArray printLabel(String urlString, String token) throws Exception {
+    public JSONArray printLabel(String token, String url, String repo, String state, String label) throws Exception {
 
+        String urlString = urlString(url, repo, state, label);
         return listService.getLabel(urlString, token);
     }
 
     @ResponseBody
     @GetMapping("/chart")
-    public ArrayList<Object> printChart(String urlString, String token) throws Exception {
+    public ArrayList<Object> printChart(String token, String url, String repo, String state, String label)
+            throws Exception {
+        String urlString = urlString(url, repo, state, label);
         return listService.getChart(urlString, token);
     }
 
     // csv 파일 다운로드
     @GetMapping("/download.csv")
-    public void downloadCsv(HttpServletResponse response, String urlString, String token) {
+    public void downloadCsv(HttpServletResponse response, String token, String url, String repo) {
 
         response.setContentType("text/csv; charset=MS949");
         response.setCharacterEncoding("MS949");
@@ -63,6 +84,8 @@ public class IndexController {
             csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
 
             String header[] = { "number", "title", "state", "user", "createAt" };
+            String urlString = urlString(url, repo, null, null);
+            System.out.println(urlString);
 
             for (ListDto list : listService.download(urlString, token)) {
                 csvWriter.write(list, header);
