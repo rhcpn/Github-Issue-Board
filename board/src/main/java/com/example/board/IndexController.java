@@ -1,11 +1,7 @@
 package com.example.board;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Map;
-
 import javax.servlet.http.HttpServletResponse;
-
 import com.example.board.Service.ListService;
 import com.example.board.dto.ListDto;
 
@@ -37,7 +33,7 @@ public class IndexController {
         }
         // 차트, 다운로드
         else {
-            return "https://api.github.com/repos/mobigen/IRIS-BigData-Platform/labels";
+            return "https://api.github.com/repos/" + repo + "/issues?per_page=100&state=all";
         }
 
     }

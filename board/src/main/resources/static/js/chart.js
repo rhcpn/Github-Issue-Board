@@ -1,4 +1,3 @@
-//$(document).ready(function () {
 $("#btn-chart").click(function () {
   showChart();
 });
@@ -49,4 +48,3 @@ function showChart() {
     });
   });
 }
-//});
