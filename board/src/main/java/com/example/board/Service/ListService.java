@@ -74,10 +74,10 @@ public class ListService {
     public JSONArray getList(String urlString, String token) throws Exception {
 
         JSONArray array = new JSONArray();
-        int i = 1;
+        int pageNum = 1;
 
         while (true) {
-            URL url = new URL(urlString + "&page=" + i);
+            URL url = new URL(urlString + "&page=" + pageNum++);
 
             JSONArray temp = urlRequest(url, token);
 
@@ -85,7 +85,6 @@ public class ListService {
                 break;
             }
             array.addAll(temp);
-            i++;
         }
 
         return array;
@@ -102,14 +101,18 @@ public class ListService {
     }
 
     // 날짜 포맷
-    public String formatDate(String date) throws ParseException {
+    public String formatDate(String date) {
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
-        if (date != null) {
-            date = format.format(format.parse(date));
-        }
+        try {
+            if (date != null) {
+                date = format.format(format.parse(date));
+            }
 
+        } catch (Exception e) {
+            return null;
+        }
         return date;
     }
 
@@ -122,10 +125,10 @@ public class ListService {
         // 날짜 리스트
         ArrayList<String> date = new ArrayList<>();
 
-        int i = 1;
+        int pageNum = 1;
 
         while (true) {
-            URL url = new URL(urlString + "&page=" + i);
+            URL url = new URL(urlString + "&page=" + pageNum++);
             JSONArray temp = urlRequest(url, token);
 
             if (temp.isEmpty() || temp == null) {
@@ -135,6 +138,10 @@ public class ListService {
             // map 에 open / closed 날짜 put
             for (int j = 0; j < temp.size(); j++) {
                 JSONObject ob = (JSONObject) temp.get(j);
+
+                if (ob == null) {
+                    break;
+                }
 
                 // 날짜 포맷
                 String closeAt = (String) ob.get("closed_at");
@@ -160,7 +167,6 @@ public class ListService {
                         array.add(closeItem);
                         date.add(closeAt);
                     }
-                    createItem = result.get(createAt);
                     closeItem.put("close", closeItem.get("close") + 1);
                 }
                 // open, close 이슈의 open 날짜
@@ -177,11 +183,9 @@ public class ListService {
                 }
                 if (createItem.get("open") != null) {
                     createItem.put("open", createItem.get("open") + 1);
-
                 }
             }
 
-            i++;
         }
 
         ArrayList<Object> open = new ArrayList<>();
@@ -211,10 +215,10 @@ public class ListService {
     public ArrayList<ListDto> download(String urlString, String token) throws Exception {
 
         ArrayList<ListDto> array = new ArrayList<>();
-        int i = 0;
+        int pageNum = 1;
 
         while (true) {
-            URL url = new URL(urlString + "&page=" + i);
+            URL url = new URL(urlString + "&page=" + pageNum++);
             JSONArray temp = urlRequest(url, token);
 
             if (temp.isEmpty() || temp == null) {
@@ -239,8 +243,6 @@ public class ListService {
                 array.add(listDto);
 
             }
-
-            i++;
         }
         return array;
 
