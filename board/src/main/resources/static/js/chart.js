@@ -3,12 +3,6 @@ $("#btn-chart").click(function () {
   showChart();
 });
 
-let today = moment().format("YYYY / MM / DD");
-let today_1 = moment().subtract(1, "days").format("YYYY / MM / DD");
-let today_2 = moment().subtract(2, "days").format("YYYY / MM / DD");
-let today_3 = moment().subtract(3, "days").format("YYYY / MM / DD");
-let today_4 = moment().subtract(4, "days").format("YYYY / MM / DD");
-
 // 차트 open
 function showChart() {
   const urlString =

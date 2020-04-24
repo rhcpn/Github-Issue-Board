@@ -26,8 +26,7 @@ $("#btn-list").click(function () {
   repo = $("#repo").val();
   printList();
   printLabel();
-  $("#btn-chart").show();
-  $("#download").show();
+  $("#list-form").hide();
 });
 
 $("#btn-all").click(function () {
@@ -93,8 +92,9 @@ function printList(label, state) {
     function (array) {
       loader.css("display", "none");
 
+      $("#btn-chart").show();
+      $("#download").show();
       $("#state").show();
-      $("#list-form").hide();
       $(".list-group").html("");
 
       for (var i = 0; i < array.length; i++) {
@@ -138,7 +138,7 @@ function printLabel() {
 
   ajaxRequest(token, urlLabel, urlStringLabel).then(
     function (array) {
-      loader.css("display", "none");
+      //loader.css("display", "none");
 
       for (var i = 0; i < array.length; i++) {
         $(".label-group").append(
