@@ -53,33 +53,34 @@ $(document).on("click", "#btn-label", function () {
 
 // ajax 요청
 function ajaxRequest(url, state, label) {
-  return $.ajax({
-    type: "GET",
-    url: url,
-    dataType: "json",
-    contentType: "application/json; charset=utf-8",
-    data: { token: token, url: url, repo: repo, state: state, label: label },
-    beforeSend: function () {
-      loader.css("display", "block");
+  return $.ajax(
+    {
+      type: "GET",
+      url: url,
+      dataType: "json",
+      contentType: "application/json; charset=utf-8",
+      data: { token: token, url: url, repo: repo, state: state, label: label },
+      beforeSend: function () {
+        loader.css("display", "block");
+      },
+      statusCode: {
+        403: function (response) {
+          alert("권한이 없습니다.");
+        },
+        404: function (response) {
+          alert("잘못된 요청입니다.");
+        },
+        500: function (response) {
+          alert("서버가 응답하지않습니다.");
+        },
+      },
     },
-    statusCode: {
-      403: function (response) {
-        alert("권한이 없습니다.");
-      },
-      404: function (response) {
-        alert("잘못된 요청입니다.");
-      },
-      500: function (response) {
-        alert("서버가 응답하지않습니다.");
-      },
-    },
-  })
-    .fail(function () {
-      console.log("");
-    })
-    .always(function () {
-      loader.hide();
-    });
+    function (error) {
+      console.log(error);
+    }
+  ).always(function () {
+    loader.hide();
+  });
 }
 
 // 이슈 리스트
