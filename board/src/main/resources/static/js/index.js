@@ -6,7 +6,8 @@ let label = "";
 let token;
 let repo;
 
-var loader = $("div.loader");
+let loader = $("div.loader");
+
 // 차트 영역, chart 버튼, all / open / closed 버튼 숨기기
 $(".highcharts-figure").hide();
 $("#btn-chart").hide();
@@ -72,83 +73,69 @@ function ajaxRequest(url, state, label) {
         alert("서버가 응답하지않습니다.");
       },
     },
-  });
+  })
+    .fail(function () {
+      console.log("");
+    })
+    .always(function () {
+      loader.hide();
+    });
 }
 
 // 이슈 리스트
 function printList(label, state) {
   const url = "/list";
 
-  ajaxRequest(url, state, label)
-    .then(
-      function (array) {
-        $("#btn-chart").show();
-        $("#download").show();
-        $("#state").show();
-        $(".list-group").html("");
+  ajaxRequest(url, state, label).then(function (array) {
+    $("#btn-chart").show();
+    $("#download").show();
+    $("#state").show();
+    $(".list-group").html("");
 
-        for (var i = 0; i < array.length; i++) {
-          var labels = "";
-          for (var j = 0; j < array[i].labels.length; j++) {
-            labels +=
-              "<span class= 'badge' style='background-color: #" +
-              array[i].labels[j].color +
-              ";'>" +
-              array[i].labels[j].name +
-              "</span>";
-          }
-          $(".list-group").append(
-            "<a href='" +
-              array[i].html_url +
-              "' class='list-group-item list-group-item-action'>" +
-              array[i].number +
-              "<p class='font-weight-bold'>" +
-              array[i].title +
-              "</p>" +
-              moment(array[i].created_at).format("YYYY / MM / DD HH:mm") +
-              "<code>" +
-              array[i].user.login +
-              "</code>" +
-              labels +
-              "</a>"
-          );
-        }
-      },
-      function (error) {
-        console.log(error);
+    for (var i = 0; i < array.length; i++) {
+      var labels = "";
+      for (var j = 0; j < array[i].labels.length; j++) {
+        labels +=
+          "<span class= 'badge' style='background-color: #" +
+          array[i].labels[j].color +
+          ";'>" +
+          array[i].labels[j].name +
+          "</span>";
       }
-    )
-    .always(function () {
-      loader.css("display", "none");
-    });
+      $(".list-group").append(
+        "<a href='" +
+          array[i].html_url +
+          "' class='list-group-item list-group-item-action'>" +
+          array[i].number +
+          "<p class='font-weight-bold'>" +
+          array[i].title +
+          "</p>" +
+          moment(array[i].created_at).format("YYYY / MM / DD HH:mm") +
+          "<code>" +
+          array[i].user.login +
+          "</code>" +
+          labels +
+          "</a>"
+      );
+    }
+  });
 }
 
 // 라벨 리스트
 function printLabel() {
   const url = "/label";
 
-  ajaxRequest(url, state, label)
-    .then(
-      function (array) {
-        console.log(array);
-
-        for (var i = 0; i < array.length; i++) {
-          $(".label-group").append(
-            "<button type='button' class='badge' id='btn-label' value='&labels=" +
-              array[i].name +
-              "' style='background-color: #" +
-              array[i].color +
-              ";'>" +
-              array[i].name +
-              "</button>"
-          );
-        }
-      },
-      function (error) {
-        console.log(error);
-      }
-    )
-    .always(function () {
-      loader.css("display", "none");
-    });
+  ajaxRequest(url, state, label).then(function (array) {
+    for (var i = 0; i < array.length; i++) {
+      $(".label-group").append(
+        "<button type='button' class='badge' id='btn-label' value='&labels=" +
+          array[i].name +
+          "' style='background-color: #" +
+          array[i].color +
+          ";'>" +
+          array[i].name +
+          "</button>"
+      );
+    }
+  });
 }
