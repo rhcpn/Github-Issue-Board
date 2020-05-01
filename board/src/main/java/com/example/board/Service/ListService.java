@@ -1,4 +1,4 @@
-package com.example.board.Service;
+package com.example.board.service;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -6,6 +6,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -25,10 +26,12 @@ public class ListService {
         BufferedReader br = null;
         JSONArray temp = null;
 
+        token = "hyun-jii:" + token;
+        String basicAuth = "Basic " + new String(Base64.getEncoder().encode(token.getBytes()));
         try {
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
-            con.addRequestProperty("token", token);
+            con.setRequestProperty("Authorization", basicAuth);
 
             InputStreamReader in = new InputStreamReader(con.getInputStream(), "utf-8");
             br = new BufferedReader(in);
