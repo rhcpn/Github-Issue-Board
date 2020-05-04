@@ -1,6 +1,8 @@
 {{>layout/header}}
 
 <h1 id="board">Issue Board</h1>
+<!-- loader -->
+<div class="loader"></div>
 <div class="col-md-12">
   <div class="row">
     <div class="col-md-6">
@@ -30,41 +32,46 @@
   <div class="row">
     <!-- download csv -->
     <div class="col-md-4">
-      <button type="button" class="btn btn-secondary" id="download">Download</button>
+      <button type="button" class="btn btn-secondary" id="download">
+        Download
+      </button>
     </div>
-  <div>
-  <div class="row">
-    <!-- issue chart -->
-    <div class="col-md-4">
-      <button type="button" class="btn" id="btn-chart">Chart ▼</button>
-    </div>
-    <div class="col-md-12" id="chart">
-      <figure class="highcharts-figure">
-        <div id="container"></div>
-      </figure>
-    </div>
-  </div>
-  <div class="row">
-  <!-- loader -->
-  <div class="loader"></div>
-    <!-- label list -->
-    <div class="col-md-6">
-      <div class="label-group"></div>
-    </div>
-  </div>
+    <div>
+      <div class="row">
+        <!-- issue chart -->
+        <div class="col-md-4">
+          <button type="button" class="btn" id="btn-chart">Chart ▼</button>
+        </div>
+        <div class="col-md-12" id="chart">
+          <figure class="highcharts-figure">
+            <div id="container"></div>
+          </figure>
+        </div>
+      </div>
+      <div class="row">
+        <!-- label list -->
+        <div class="col-md-6">
+          <div class="label-group"></div>
+        </div>
+      </div>
 
-  <div class="row">
-    <!-- all / open / closed filtering -->
-    <div class="col-md-4" id="state">
-      <button type="button" id="btn-all" value="&state=all">ALL</button> /
-      <button type="button" id="btn-open" value="&state=open">OPEN</button> /
-      <button type="button" id="btn-close" value="&state=closed">CLOSED</button>
+      <div class="row">
+        <!-- all / open / closed filtering -->
+        <div class="col-md-4" id="state">
+          <button type="button" id="btn-all" value="&state=all">ALL</button> /
+          <button type="button" id="btn-open" value="&state=open">OPEN</button>
+          /
+          <button type="button" id="btn-close" value="&state=closed">
+            CLOSED
+          </button>
+        </div>
+        <!-- issue list -->
+        <div class="col-md-12">
+          <div class="list-group"></div>
+        </div>
+      </div>
     </div>
-    <!-- issue list -->
-    <div class="col-md-12">
-      <div class="list-group"></div>
-    </div>
+
+    {{>layout/footer}}
   </div>
 </div>
-
-{{>layout/footer}}
