@@ -6,12 +6,6 @@ let label = "";
 let token;
 let repo;
 
-// 차트 영역, chart 버튼, all / open / closed 버튼 숨기기
-$(".highcharts-figure").hide();
-$("#btn-chart").hide();
-$("#state").hide();
-$("#download").hide();
-
 // Issue Board, home 클릭 시
 $("#board").click(function () {
   state = "";
@@ -84,9 +78,9 @@ function printList(label, state) {
   const url = "/list";
 
   ajaxRequest(url, state, label).then(function (array) {
-    $("#btn-chart").show();
-    $("#download").show();
-    $("#state").show();
+    $("#btn-chart").css("display", "block");
+    $("#download").css("display", "block");
+    $("#state").css("display", "block");
     $(".list-group").html("");
 
     for (var i = 0; i < array.length; i++) {

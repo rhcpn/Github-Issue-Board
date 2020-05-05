@@ -1,0 +1,9 @@
+#board {
+  cursor: pointer;
+}
+
+#btn-chart,
+#state,
+#download {
+  display: none;
+}

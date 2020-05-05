@@ -7,7 +7,7 @@ function showChart() {
   const url = "/chart";
 
   ajaxRequest(url, state, label).then(function (array) {
-    $(".highcharts-figure").show();
+    $(".highcharts-figure").css("display", "block");
 
     Highcharts.chart("container", {
       chart: {
