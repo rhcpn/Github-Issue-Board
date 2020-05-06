@@ -6,14 +6,6 @@ let label = "";
 let token;
 let repo;
 
-let loader = $("div.loader");
-
-// 차트 영역, chart 버튼, all / open / closed 버튼 숨기기
-$(".highcharts-figure").hide();
-$("#btn-chart").hide();
-$("#state").hide();
-$("#download").hide();
-
 // Issue Board, home 클릭 시
 $("#board").click(function () {
   state = "";
@@ -25,7 +17,6 @@ $("#board").click(function () {
 $("#btn-list").click(function () {
   token = $("#token").val();
   repo = $("#repo").val();
-  printList();
   printLabel();
   $("#list-form").hide();
 });
@@ -60,7 +51,7 @@ function ajaxRequest(url, state, label) {
     contentType: "application/json; charset=utf-8",
     data: { token: token, url: url, repo: repo, state: state, label: label },
     beforeSend: function () {
-      loader.css("display", "block");
+      $(".loader").css("display", "block");
     },
     statusCode: {
       403: function (response) {
@@ -74,7 +65,7 @@ function ajaxRequest(url, state, label) {
       },
     },
     complete: function () {
-      loader.css("display", "none");
+      $(".loader").css("display", "none");
     },
     fail: function () {
       console.log(error);
@@ -87,9 +78,9 @@ function printList(label, state) {
   const url = "/list";
 
   ajaxRequest(url, state, label).then(function (array) {
-    $("#btn-chart").show();
-    $("#download").show();
-    $("#state").show();
+    $("#btn-chart").css("display", "block");
+    $("#download").css("display", "block");
+    $("#state").css("display", "block");
     $(".list-group").html("");
 
     for (var i = 0; i < array.length; i++) {
@@ -137,5 +128,6 @@ function printLabel() {
           "</button>"
       );
     }
+    printList();
   });
 }

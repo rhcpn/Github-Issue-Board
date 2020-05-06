@@ -2,7 +2,7 @@ package com.example.board;
 
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletResponse;
-import com.example.board.Service.ListService;
+import com.example.board.service.ListService;
 import com.example.board.dto.ListDto;
 
 import org.json.simple.JSONArray;
