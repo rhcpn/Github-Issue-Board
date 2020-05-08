@@ -45,31 +45,33 @@ public class IndexController {
 
     @ResponseBody
     @GetMapping("/list")
-    public JSONArray printList(String token, String url, String repo, String state, String label) throws Exception {
+    public JSONArray printList(String token, String url, String repo, String state, String label, String userId)
+            throws Exception {
 
         String urlString = urlString(url, repo, state, label);
-        return listService.getList(urlString, token);
+        return listService.getList(urlString, token, userId);
     }
 
     @ResponseBody
     @GetMapping("/label")
-    public JSONArray printLabel(String token, String url, String repo, String state, String label) throws Exception {
+    public JSONArray printLabel(String token, String url, String repo, String state, String label, String userId)
+            throws Exception {
 
         String urlString = urlString(url, repo, state, label);
-        return listService.getLabel(urlString, token);
+        return listService.getLabel(urlString, token, userId);
     }
 
     @ResponseBody
     @GetMapping("/chart")
-    public ArrayList<Object> printChart(String token, String url, String repo, String state, String label)
-            throws Exception {
+    public ArrayList<Object> printChart(String token, String url, String repo, String state, String label,
+            String userId) throws Exception {
         String urlString = urlString(url, repo, state, label);
-        return listService.getChart(urlString, token);
+        return listService.getChart(urlString, token, userId);
     }
 
     // csv 파일 다운로드
     @GetMapping("/download.csv")
-    public void downloadCsv(HttpServletResponse response, String token, String url, String repo) {
+    public void downloadCsv(HttpServletResponse response, String token, String url, String repo, String userId) {
 
         response.setContentType("text/csv; charset=MS949");
         response.setCharacterEncoding("MS949");
@@ -83,7 +85,7 @@ public class IndexController {
             String urlString = urlString(url, repo, null, null);
             System.out.println(urlString);
 
-            for (ListDto list : listService.download(urlString, token)) {
+            for (ListDto list : listService.download(urlString, token, userId)) {
                 csvWriter.write(list, header);
             }
 

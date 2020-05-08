@@ -21,12 +21,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class ListService {
 
-    public JSONArray urlRequest(URL url, String token) throws Exception {
+    public JSONArray urlRequest(URL url, String token, String userId) throws Exception {
 
         BufferedReader br = null;
         JSONArray temp = null;
 
-        token = "hyun-jii:" + token;
+        token = userId + ":" + token;
         String basicAuth = "Basic " + new String(Base64.getEncoder().encode(token.getBytes()));
         try {
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -64,7 +64,7 @@ public class ListService {
     }
 
     // 이슈 리스트
-    public JSONArray getList(String urlString, String token) throws Exception {
+    public JSONArray getList(String urlString, String token, String userId) throws Exception {
 
         JSONArray array = new JSONArray();
         int pageNum = 1;
@@ -72,7 +72,7 @@ public class ListService {
         while (true) {
             URL url = new URL(urlString + "&page=" + pageNum++);
 
-            JSONArray temp = urlRequest(url, token);
+            JSONArray temp = urlRequest(url, token, userId);
 
             if (temp.isEmpty() || temp == null) {
                 break;
@@ -85,10 +85,10 @@ public class ListService {
     }
 
     // 라벨 리스트
-    public JSONArray getLabel(String urlString, String token) throws Exception {
+    public JSONArray getLabel(String urlString, String token, String userId) throws Exception {
 
         URL url = new URL(urlString);
-        JSONArray temp = urlRequest(url, token);
+        JSONArray temp = urlRequest(url, token, userId);
 
         return temp;
     }
@@ -120,7 +120,7 @@ public class ListService {
     }
 
     // 차트
-    public ArrayList<Object> getChart(String urlString, String token) throws Exception {
+    public ArrayList<Object> getChart(String urlString, String token, String userId) throws Exception {
 
         Map<String, Map<String, Integer>> result = new LinkedHashMap<>();
         // open, close 리스트
@@ -132,7 +132,7 @@ public class ListService {
 
         while (true) {
             URL url = new URL(urlString + "&page=" + pageNum++);
-            JSONArray temp = urlRequest(url, token);
+            JSONArray temp = urlRequest(url, token, userId);
 
             if (temp.isEmpty() || temp == null) {
                 break;
@@ -211,14 +211,14 @@ public class ListService {
     }
 
     // 리스트 다운로드
-    public ArrayList<ListDto> download(String urlString, String token) throws Exception {
+    public ArrayList<ListDto> download(String urlString, String token, String userId) throws Exception {
 
         ArrayList<ListDto> array = new ArrayList<>();
         int pageNum = 1;
 
         while (true) {
             URL url = new URL(urlString + "&page=" + pageNum++);
-            JSONArray temp = urlRequest(url, token);
+            JSONArray temp = urlRequest(url, token, userId);
 
             if (temp.isEmpty() || temp == null) {
                 break;
