@@ -29,7 +29,7 @@ public class IndexController {
         }
         // 라벨 리스트
         else if (url.equals("/label")) {
-            return "https://api.github.com/repos/mobigen/IRIS-BigData-Platform/labels";
+            return "https://api.github.com/repos/" + repo + "/labels";
         }
         // 차트, 다운로드
         else {
