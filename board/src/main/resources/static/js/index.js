@@ -2,9 +2,10 @@
 let state = "";
 let label = "";
 
-// token & repo name
+// token & repo name & user id
 let token;
 let repo;
+let userId;
 
 // Issue Board, home 클릭 시
 $("#board").click(function () {
@@ -17,6 +18,7 @@ $("#board").click(function () {
 $("#btn-list").click(function () {
   token = $("#token").val();
   repo = $("#repo").val();
+  userId = $("#userId").val();
   printLabel();
   $("#list-form").hide();
 });
@@ -49,7 +51,14 @@ function ajaxRequest(url, state, label) {
     url: url,
     dataType: "json",
     contentType: "application/json; charset=utf-8",
-    data: { token: token, url: url, repo: repo, state: state, label: label },
+    data: {
+      token: token,
+      url: url,
+      repo: repo,
+      state: state,
+      label: label,
+      userId: userId,
+    },
     beforeSend: function () {
       $(".loader").css("display", "block");
     },
