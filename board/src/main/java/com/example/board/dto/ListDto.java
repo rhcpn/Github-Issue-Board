@@ -11,5 +11,6 @@ public class ListDto {
     private String state;
     private String user;
     private String createAt;
+    private String labelName;
 
 }

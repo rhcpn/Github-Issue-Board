@@ -236,8 +236,15 @@ public class ListService {
 
                 String createAt = (String) ob.get("created_at");
                 createAt = formatDate(createAt);
+                String labelName = "";
 
-                ListDto listDto = new ListDto(number, title, state, user, createAt);
+                JSONArray labels = (JSONArray) ob.get("labels");
+                for (int i = 0; i < labels.size(); i++) {
+                    JSONObject label = (JSONObject) labels.get(i);
+                    labelName += "[" + (String) label.get("name") + "]";
+                }
+
+                ListDto listDto = new ListDto(number, title, state, user, labelName, createAt);
 
                 array.add(listDto);
 
