@@ -81,9 +81,8 @@ public class IndexController {
         try {
             csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
 
-            String header[] = { "number", "title", "state", "user", "createAt" };
+            String header[] = { "number", "title", "state", "user", "labelName", "createAt" };
             String urlString = urlString(url, repo, null, null);
-            System.out.println(urlString);
 
             for (ListDto list : listService.download(urlString, token, userId)) {
                 csvWriter.write(list, header);
